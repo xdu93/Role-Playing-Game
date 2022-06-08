@@ -65,15 +65,15 @@ public class Game {
             break;
             case "2": {
                try{
-                   Battle.battle(player, world.getEnemies().remove((int) (Math.random()*world.getEnemies().size()-1)));
+                   Battle.battle(player, world.getEnemies().remove((int) (Math.random()*world.getEnemies().size()-1)),
+                           world);
                } catch (IndexOutOfBoundsException e) {
                    System.out.println("You kill all enemies!! You win!!");
                    command(world, "3");
                    break;
                }
+                break;
             }
-            printWays(world);
-            break;
             case "3":
                 System.exit(1);
                 break;

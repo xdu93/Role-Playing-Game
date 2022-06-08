@@ -2,16 +2,16 @@ import Units.*;
 
 public class Battle {
 
-    public static void battle(Player player, Unit enemy) {
+    public static void battle(Player player, Unit enemy, World world) {
         Runnable runnable = () -> {
             int step = 1;
             boolean flagBattleEnd = false;
             while (!flagBattleEnd){
-                System.out.println("******Step "  + step + " ******");
+                System.out.println("******Step_"  + step + "******");
                 if (step++ % 2 == 0) {
-                    flagBattleEnd = hit(enemy, player);
+                    flagBattleEnd = hit(enemy, player, world);
                 } else {
-                    flagBattleEnd = hit(player, enemy);
+                    flagBattleEnd = hit(player, enemy, world);
                 }
                 try {
                     Thread.sleep(1500);
@@ -24,7 +24,7 @@ public class Battle {
         thread.start();
     }
 
-    private static boolean hit(Unit attacker, Unit defender) {
+    private static boolean hit(Unit attacker, Unit defender, World world) {
             int hitPower = attacker.attack();
             int defenderHP = defender.getHealth() - hitPower;
             if (hitPower != 0){
@@ -36,6 +36,9 @@ public class Battle {
                     attacker.setLevel(attacker.getLevel() + defender.getLevel());
                     attacker.setGold(attacker.getGold() + defender.getGold());
                     System.out.println("Now: " + attacker);
+
+                    System.out.println("Choose the way, according to the list below:");
+                    System.out.println(world.getWays());
                     return true;
                 } else {
                     System.out.printf("%s - made hit, %d - hit power.\n", attacker.getName(), hitPower);

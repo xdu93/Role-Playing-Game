@@ -20,12 +20,12 @@ public class World {
         typesOfPlayers.put("Orc", new Player(30, 18, "Orc"));
 
         //Создание гоблинов
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 4; i++) {
             enemies.add(new Goblin());
         }
 
         //Создание скелетов
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 3; i++) {
             enemies.add(new Skull());
         }
 
