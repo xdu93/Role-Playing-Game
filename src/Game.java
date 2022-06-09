@@ -1,18 +1,42 @@
 import Units.Player;
 import java.io.*;
 
+import static java.lang.Thread.sleep;
+
 public class Game {
     static String playerName;
     private static BufferedReader bfr;
     private static Player player = null;
     private static Battle battle = null;
+    private static int menuSection;
 
     public static void main(String[] args) {
         //создание мира
         World wow = new World();
         bfr = new BufferedReader(new InputStreamReader(System.in));
         //начало игры
-        System.out.println("The game downloaded!!!");
+        System.out.print("The game downloading");
+        for (int i = 0; i < 15; i++) {
+            System.out.print(".");
+            try {
+                sleep(500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        System.out.println("\n**************************");
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("Hello, welcome to our world!");
+        try {
+            sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        System.out.println("You have to kill all monsters to win.");
 
         try {
             command(wow , "start");
@@ -26,6 +50,7 @@ public class Game {
     }
 
     private static void command(World world, String str) throws IOException {
+
         //Если это первый запуск, то мы должны создать игрока, именем будет служить первая введенная строка из консоли
         if (player == null) {
             System.out.println("Choose type of your player, enter the type according to the list bellow. " +
@@ -36,7 +61,6 @@ public class Game {
             while (player == null) {
                 System.out.println("Your write wrong type. Please try again");
                     player = chooseType(world, bfr.readLine());
-
             }
 
             //Ввод имени персонажа
@@ -58,35 +82,62 @@ public class Game {
         }
         //Варианты для команд
         switch (str) {
+            case "start":
+                menuSection = 0;
+                break;
             case "1": {
-                System.out.println("Do you want to buy *HEALTH POTION* for 50 gold? Print Yes or No.");
-                command(world , bfr.readLine());
+                if (menuSection == 0) {
+                    menuSection = 1;
+                    System.out.println("Do you want to buy *HEALTH POTION* for 50 gold? Print Yes or No.");
+                    command(world, bfr.readLine());
+                    break;
+                }
+                wrongCommand(world);
+                break;
             }
-            break;
             case "2": {
-               try{
-                   Battle.battle(player, world.getEnemies().remove((int) (Math.random()*world.getEnemies().size()-1)),
-                           world);
-               } catch (IndexOutOfBoundsException e) {
-                   System.out.println("You kill all enemies!! You win!!");
-                   command(world, "3");
-                   break;
-               }
+                if (menuSection == 0) {
+                    try {
+                        Battle.battle(player, world.getEnemies().remove((int) (Math.random() * world.getEnemies().size() - 1)),
+                                world);
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("You kill all enemies!! You win!!");
+                        command(world, "3");
+                        break;
+                    }
+                    break;
+                }
+                wrongCommand(world);
                 break;
             }
             case "3":
-                System.exit(1);
+                if (menuSection == 0) {
+                    System.out.println("Goodbye((");
+                    System.exit(1);
+                    break;
+                }
+                wrongCommand(world);
                 break;
             case "Yes":
-                player.setHealth(100);
-                player.setGold(player.getGold() - 50);
-                System.out.println("Now: " + player);
-                printWays(world);
-                break;
-            case "No": {
+                if (menuSection == 1) {
+                    menuSection = 0;
+                    player.setHealth(100);
+                    player.setGold(player.getGold() - 50);
+                    System.out.println("Now: " + player);
+                    printWays(world);
+                    break;
+                }
+            case "No":
+                if (menuSection == 1) {
+                menuSection = 0;
                 printWays(world);
                 command(world, bfr.readLine());
+                break;
             }
+                wrongCommand(world);
+                break;
+            default:
+                wrongCommand(world);
         }
         //Снова ждем команды от пользователя
         command(world, bfr.readLine());
@@ -95,5 +146,10 @@ public class Game {
     private static void printWays(World world) {
         System.out.println("Choose the way, according to the list below:");
         System.out.println(world.getWays());
+    }
+
+    private static void wrongCommand(World world) throws IOException {
+        System.out.println("You write entered a non-existent command. Try again.");
+        command(world, bfr.readLine());
     }
 }

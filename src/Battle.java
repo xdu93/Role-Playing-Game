@@ -7,7 +7,7 @@ public class Battle {
             int step = 1;
             boolean flagBattleEnd = false;
             while (!flagBattleEnd){
-                System.out.println("******Step_"  + step + "******");
+                System.out.println("******Hit_"  + step + "******");
                 if (step++ % 2 == 0) {
                     flagBattleEnd = hit(enemy, player, world);
                 } else {
@@ -56,10 +56,5 @@ public class Battle {
             defender.setHealth(defenderHP);
             return false;
         }
-    }
-
-    interface FightCallback {
-        void fightWin();
-        void fightLost();
     }
 }

@@ -45,7 +45,5 @@ public class World {
 
     public List<Unit> getEnemies() { return enemies; }
 
-    public Dealer getDealer() {
-        return dealer;
-    }
+    public Dealer getDealer() { return dealer; }
 }
